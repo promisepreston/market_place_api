@@ -1,5 +1,6 @@
 class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: %i[show update destroy]
+  before_action :authenticate_user, only: %i[update destroy]
 
   # GET /users/1
   def show
@@ -41,5 +42,9 @@ class Api::V1::UsersController < ApplicationController
 
   def set_user
     @user_find = User.find(params[:id])
+  end
+
+  def authenticate_user
+    head :forbidden unless @user.id == current_user&.id
   end
 end
